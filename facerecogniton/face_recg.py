@@ -14,7 +14,8 @@ main.py --mode "input"
 import cv2
 from align_custom import AlignCustom
 from face_feature import FaceFeature
-from mtcnn_detect import MTCNNDetect
+#from mtcnn_detect import MTCNNDetect
+import mtcnn_detect_v2
 import argparse
 import sys, time
 import json
@@ -30,7 +31,8 @@ import codecs
 #FRGraph = FaceRecGraph();
 aligner = AlignCustom();
 extract_feature = FaceFeature()
-face_detect = MTCNNDetect(scale_factor=3); #scale_factor, rescales image for faster detection
+#face_detect = MTCNNDetect(scale_factor=3); #scale_factor, rescales image for faster detection
+face_detect = mtcnn_detect_v2.mtcnn_detector
 feature_data_set = None
 
 CAMERA_NUMBER = 4
@@ -69,7 +71,12 @@ def recog_process_frame(frames):
 
     for (index,frame) in enumerate(frames):
         cameras.append(CameraRouad())
-        cameras[index].rects, landmarks = face_detect.detect_face(frame,20);#min face size is set to 80x80
+        cameras[index].rects, landmarks = face_detect.detect(frame);#min face size is set to 80x80
+        #cameras[index].rects, landmarks = face_detect.detect_face(frame);#min face size is set to 80x80
+        print landmarks
+
+
+
         face_tracker[index].increase_frame()
         for (i, rect) in enumerate(cameras[index].rects):
             aligned_face, face_pos = aligner.align(160,frame,landmarks[i])

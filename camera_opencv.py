@@ -4,10 +4,9 @@ import facerecogniton.facerecogniton as facerecg
 import Queue
 import numpy as np
 import time,os
-import affinity
 
 class Camera(BaseCamera):
-    video_source = [0]
+    video_source = ["rtsp://admin:a12345678@10.193.20.34/mpeg4/ch1/sub/av_stream"]
     camera_number = 1
     buffer_count = 7
     reg_ret = []
@@ -89,8 +88,9 @@ class Camera(BaseCamera):
                 for ret in each:
                     #draw bounding box for the face
                     rect = ret['rect']
-                    cv2.rectangle(images[i],(rect[0],rect[1]),(rect[0] + rect[2],rect[1]+rect[3]),(0,0,255),2)
-                    cv2.putText(images[i], ret['name'],(rect[0],rect[1]),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
+                    cv2.rectangle(images[i],(int(rect[0]), int(rect[1])), (int(rect[2]), int(rect[3])),(0,0,255),2)
+                    #cv2.rectangle(images[i],(rect[0],rect[1]),(rect[0] + rect[2],rect[1]+rect[3]),(0,0,255),2)
+                    cv2.putText(images[i], ret['name'],(int(rect[0]), int(rect[1])),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),2)
 
             # encode as a jpeg image and return it
             if (len(images) == 1):

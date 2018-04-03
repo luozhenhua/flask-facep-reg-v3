@@ -113,17 +113,9 @@ class FaceRecognitonProcess(Process):
                              self.poscount["Left"] += 1
                         elif len(rets[0]) == 1 and rets[0][0]["pos"] == "Right":
                              self.poscount["Right"] += 1
+                        print self.poscount
                     elif self.training == 0:
                         rets = face_recg.recog_process_frame(inFrame)
-                        if len(rets) == 1 and rets[0]["pos"] == "Center" and rets[0]["name"] != " ":
-                            name = rets[0]["name"]
-                            if name not in self.history_names:
-                                self.history_names[name] = [0, int(time.time() * 1000)]
-                            else:
-                                self.history_names[name][0] += 1
-
-                            if self.history_names[name][0] == 5:
-                                self.sendGuidence(name)
                     else:
                         rets = face_recg.detect_people(inFrame)
                     self.sendResult(rets)
