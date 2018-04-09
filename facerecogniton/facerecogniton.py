@@ -50,7 +50,7 @@ class FaceRecognitonProcess(Process):
         self.training = 0
 
     def module_update(self, client, userdata, message):
-        print "in module_update"
+        print("in module_update")
         self.cmdq.put((CMD_MODULE_UPDATE, None))
 
     def run(self):
@@ -106,14 +106,12 @@ class FaceRecognitonProcess(Process):
                         continue
                     if self.training == 1:
                         rets = face_recg.train_process_people(inFrame)
-                        print rets
                         if len(rets[0]) == 1 and rets[0][0]["pos"] == "Center":
                              self.poscount["Center"] += 1
                         elif len(rets[0]) == 1 and rets[0][0]["pos"] == "Left":
                              self.poscount["Left"] += 1
                         elif len(rets[0]) == 1 and rets[0][0]["pos"] == "Right":
                              self.poscount["Right"] += 1
-                        print self.poscount
                     elif self.training == 0:
                         rets = face_recg.recog_process_frame(inFrame)
                     else:

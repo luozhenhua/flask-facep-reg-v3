@@ -21,7 +21,6 @@ import sys, time
 import json
 import numpy as np
 from PIL import Image
-import StringIO
 import threading
 from face_tracker import *
 import ctypes
@@ -73,9 +72,6 @@ def recog_process_frame(frames):
         cameras.append(CameraRouad())
         cameras[index].rects, landmarks = face_detect.detect(frame);#min face size is set to 80x80
         #cameras[index].rects, landmarks = face_detect.detect_face(frame);#min face size is set to 80x80
-        print landmarks
-
-
 
         face_tracker[index].increase_frame()
         for (i, rect) in enumerate(cameras[index].rects):
@@ -180,7 +176,7 @@ def findPeople_Optee(features_arr, positions, thres = 0.5, percent_thres = 97):
 def detect_people(frames):
     rets = []
     for frame in frames:
-        rects, landmarks = face_detect.detect_face(frame,20);#min face size is set to 80x80
+        rects, landmarks = face_detect.detect(frame);#min face size is set to 80x80
         ret_per_frame = []
         for (i, rect) in enumerate(rects):
             ret_per_frame.append({"name":"", "rect":rect, "pos":"None"})
@@ -242,7 +238,7 @@ def train_finish(callback):
 
 def train_process_people(frames):
     frame = frames[0]
-    rects, landmarks = face_detect.detect_face(frame, 20);
+    rects, landmarks = face_detect.detect(frame);
     ret_per_frame = []
     rets = []
     if (len(rects) == 1):

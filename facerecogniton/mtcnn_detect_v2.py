@@ -1,9 +1,11 @@
 import sys
+sys.path.append("facerecogniton/MTCNN")
 
-from MTCNN.Detection.MtcnnDetector import MtcnnDetector
-from MTCNN.Detection.detector import Detector
-from MTCNN.Detection.fcn_detector import FcnDetector
-from MTCNN.Detection.mtcnn_model import P_Net, R_Net, O_Net
+
+from MTCNN.MtcnnDetector import MtcnnDetector
+from MTCNN.detector import Detector
+from MTCNN.fcn_detector import FcnDetector
+from MTCNN.mtcnn_model import P_Net, R_Net, O_Net
 
 
 test_mode = "onet"

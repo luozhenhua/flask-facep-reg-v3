@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import sys
+sys.path.append("facerecogniton")
 from importlib import import_module
 import os,time
 from flask import Flask, render_template, Response

@@ -8,7 +8,11 @@ from twisted.internet import task, defer
 from twisted.internet.ssl import DefaultOpenSSLContextFactory
 import facerecogniton.facerecogniton as facerecg
 from multiprocessing import Process
-import time, StringIO, base64, os
+import time, base64, os
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 from PIL import Image
 import threading
 
@@ -25,13 +29,13 @@ class FaceServerProtocol(WebSocketServerProtocol):
         self.sendSocketMessage("LOADNAME_RESP", ",".join(names))
 
     def onOpen(self):
-        print "open"
+        print("open")
 
     def onClose(self, wasClean, code, reason):
-        print "close"
+        print("close")
 
     def getTrainStatus(self):
-        print "getTrainStatus"
+        print("getTrainStatus")
         ret = facerecg.getTrainStatus()
         if ret[0] == 1:
             reactor.callLater(0.5, self.getTrainStatus)
@@ -79,14 +83,14 @@ class FaceServerProtocol(WebSocketServerProtocol):
             print("TRAINFINISH_REQ ignore")
 
     def sendSocketMessage(self, mtype, msg = ""):
-        msg = { "type" : mtype, 'msg' : msg }
-        self.sendMessage(json.dumps(msg))
+        payload = json.dumps({ "type" : mtype, 'msg' : msg })
+        self.sendMessage(payload.encode('utf8'))
 
     def proWebFrame(self, dataURL):
         head = "data:image/jpeg;base64,"
         assert(dataURL.startswith(head))
         imgdata = base64.b64decode(dataURL[len(head):])
-        imgf = Image.open(StringIO.StringIO(imgdata))
+        imgf = Image.open(StringIO(imgdata))
         facerecg.proImageFile(imgf)
 
 fdir = os.path.dirname(os.path.realpath(__file__))
